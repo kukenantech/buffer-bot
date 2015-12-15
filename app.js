@@ -19,7 +19,12 @@ app.post('/share', function (req, res, next) {
 
 	console.log(req.body)
 
-	return res.status(200).json(req.body);
+	// avoid infinite loop
+	if (userName !== 'slackbot') {
+	    return res.status(200).json(req.body);
+	} else {
+      return res.status(200).end();
+	}
 })
 
 // error handler
