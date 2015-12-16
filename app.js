@@ -9,9 +9,11 @@ let port = process.env.PORT || 3000
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// test route
+// home route
 app.get('/', function (req, res) { res.status(200).send('Hello world!') })
-app.post('/share', function (req, res, next) {
+
+// POST request triggered from slack add-buffer
+app.post('/add-buffer', function (req, res, next) {
   
 	let botPayload = {
 		text : 'Hello!'
