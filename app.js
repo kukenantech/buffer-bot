@@ -22,7 +22,7 @@ app.post('/add-buffer', function (req, res, next) {
 	console.log(req.body)
 
 	// avoid infinite loop
-	if (userName !== 'slackbot') {
+	if (req.user_name !== 'slackbot') {
 	    return res.status(200).json(req.body);
 	} else {
       return res.status(200).end();
