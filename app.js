@@ -20,7 +20,8 @@ app.post('/add-buffer', function (req, res, next) {
 
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
-		url = url[0]
+
+		console.log(url)
 
 		let path = "https://buffer.com/ajax/scraper?url=" + url + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
 
