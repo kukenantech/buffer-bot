@@ -18,16 +18,15 @@ app.post('/add-buffer', function (req, res, next) {
 
 	// avoid infinite loop
 	if (req.body.user_name !== 'slackbot') {
-		let parseBody = JSON.parse(req.body)
 
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
-		let url = parseBody.text.match(regex)
+		let url = req.body.text.match(regex)
 
 		console.log(url)
 		//bufferScraper("http://www.entrepreneur.com/article/253857")
 
 		let botResponse = {
-			text : "@" + parseBody.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
+			text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
 		}
 
 	    return res.status(200).json(botResponse)
