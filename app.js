@@ -21,9 +21,7 @@ app.post('/add-buffer', function (req, res, next) {
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
 
-		console.log(url)
-
-		let path = "https://buffer.com/ajax/scraper?url=" + url + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
+		let path = "https://buffer.com/ajax/scraper?url=" + url[0] + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
 
 		request(path, function (error, response, body) {
 		  if (!error && response.statusCode == 200) {
@@ -32,10 +30,10 @@ app.post('/add-buffer', function (req, res, next) {
 		  	console.log(parseBody)
 
 		  	let data = {
-		  		text: parseBody.title + " " + url,
+		  		text: parseBody.title + " " + url[0],
 		  		media: {
-		  			link: url,
-		  			photo: parseBody.images[0].url
+		  			link: url[0],
+		  			photo: parseBody.images[0].url[0]
 		  		}
 		  	}
 
