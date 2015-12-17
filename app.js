@@ -27,6 +27,8 @@ app.post('/add-buffer', function (req, res, next) {
 		  if (!error && response.statusCode == 200) {
 		  	let parseBody = JSON.parse(body)
 
+		  	console.log(parseBody)
+
 		  	let data = {
 		  		text: parseBody.title + " " + url,
 		  		media: {
