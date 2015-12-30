@@ -18,9 +18,11 @@ app.post('/add-buffer', function (req, res, next) {
 
 	if (req.body.user_name !== 'slackbot') {
 
+		//	Getting URL from slack message
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
 
+		//	Parsing URL to get title, images, etc
 		let path = "https://buffer.com/ajax/scraper?url=" + url[0] + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
 
 		request(path, function (error, response, body) {
@@ -29,6 +31,7 @@ app.post('/add-buffer', function (req, res, next) {
 
 		  	console.log(parseBody)
 
+		  	//	Creating payload to POST /update/create
 		  	let data = {
 		  		text: parseBody.title + " " + url[0],
 		  		media: {
