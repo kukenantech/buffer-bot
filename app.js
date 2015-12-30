@@ -42,6 +42,9 @@ app.post('/add-buffer', function (req, res, next) {
 
 		  	data.profile_ids = [ "566bb65af63980ee5a840357", "566bb682f63980ca5a840356", "566bb77917e384015a840354"]
 
+		  	console.log("------------------------------")
+		  	console.log(data)
+		  	
 		  	request({
 		  	  uri: "https://api.bufferapp.com/1/updates/create.json?access_token=1/5a3f1179acb4ef897edfb22f9b86d4b0",
 		  	  method: "POST",
