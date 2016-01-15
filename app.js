@@ -25,51 +25,55 @@ app.post('/add-buffer', function (req, res, next) {
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
 
-		//	Getting Title, Description, Images and Metatags
-		let article = new MetaInspector(url[0], { timeout: 5000 })
+		if(url[0]) {
+			//	Getting Title, Description, Images and Metatags
+			let article = new MetaInspector(url[0], { timeout: 5000 })
 
-		article.on("fetch", function() {
+			article.on("fetch", function() {
 
-			//	Data payload
-			let data = {
-		  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, config.LINKEDIN_PID],
-		  		text: article.ogTitle + " " + url[0],
-		  		media: {
-		  			link: url[0],
-		  			title: article.ogTitle,
-		  			description: article.ogDescription,
-		  			photo: article.image,
-		  			picture: article.image
-		  		}
-		  	}
-		  	
-		  	// API request to Buffer API
-		  	request({
-		  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
-		  	  method: "POST",
-		  	  form: data,
-		  	}, function(error, response, body) {
-		  		if(error) {
-		  	  		console.log("Error: " + error)
-		  		} else {
-		  			console.log("Success!")
-		  			console.log("Status Code: " + response.statusCode)
-		  			//console.log("Body:" + body)
-		  		}
-		  	})
-		})
+				//	Data payload
+				let data = {
+			  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, config.LINKEDIN_PID],
+			  		text: article.ogTitle + " " + url[0],
+			  		media: {
+			  			link: url[0],
+			  			title: article.ogTitle,
+			  			description: article.ogDescription,
+			  			photo: article.image,
+			  			picture: article.image
+			  		}
+			  	}
+			  	
+			  	// API request to Buffer API
+			  	request({
+			  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
+			  	  method: "POST",
+			  	  form: data,
+			  	}, function(error, response, body) {
+			  		if(error) {
+			  	  		console.log("Error: " + error)
+			  		} else {
+			  			console.log("Success!")
+			  			console.log("Status Code: " + response.statusCode)
+			  			//console.log("Body:" + body)
+			  		}
+			  	})
+			})
 
-		article.on("error", function(err){
-		    console.log(error);
-		})
+			article.on("error", function(err){
+			    console.log(error);
+			})
 
-		article.fetch()
+			article.fetch()
 
-		let botResponse = {
-			text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
+			let botResponse = {
+				text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
+			}
+
+		    return res.status(200).json(botResponse)
+		} else {
+			return res.status(200).json({text: "@" + req.body.user_name + "No detecté ningún URL para compartir :-1:. Inténtalo de nuevo!"})
 		}
-
-	    return res.status(200).json(botResponse)
 	} else {
       return res.status(200).end()
 	}
