@@ -3,6 +3,7 @@
 const express = require('express')
 const request = require('request')
 const bodyParser = require('body-parser')
+const MetaInspector = require('node-metainspector')
 
 let app = express()
 let port = process.env.PORT || 3000
@@ -22,31 +23,20 @@ app.post('/add-buffer', function (req, res, next) {
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
 
-		//	Parsing URL to get title, images, etc
-		/*let path = "https://buffer.com/ajax/scraper?url=" + url[0] + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
+		let article = new MetaInspector(url[0], { timeout: 5000 })
 
-		request(path, function (error, response, body) {
-		  if (!error && response.statusCode == 200) {
-		  	let parseBody = JSON.parse(body)
-
-		  	console.log(parseBody)*/
-
-		  	//	Creating payload to POST /update/create
-		  	/*let data = {
-		  		text: parseBody.title + " " + url[0],
+		article.on("fetch", function() {
+			let data = {
+		  		profile_ids: [ "566bb65af63980ee5a840357", "566bb682f63980ca5a840356", "566bb77917e384015a840354"],
+		  		text: article.ogTitle + " " + url[0],
 		  		media: {
 		  			link: url[0],
-		  			photo: parseBody.images[0].url[0]
-		  		}
-		  	}*/
-
-		  	let data = {
-		  		media: {
-		  			link: url[0]
+		  			title: article.ogTitle,
+		  			description: article.ogDescription,
+		  			photo: article.image,
+		  			picture: article.image
 		  		}
 		  	}
-
-		  	data.profile_ids = [ "566bb65af63980ee5a840357", "566bb682f63980ca5a840356", "566bb77917e384015a840354"]
 
 		  	console.log("------------------------------")
 		  	console.log(data)
@@ -59,14 +49,18 @@ app.post('/add-buffer', function (req, res, next) {
 		  		if(error) {
 		  	  		console.log("Error: " + error)
 		  		} else {
+		  			console.log("Success!")
 		  			console.log("Status Code: " + response.statusCode)
-		  			console.log("Body:" + body)
+		  			//console.log("Body:" + body)
 		  		}
 		  	})
-		  /*} else {
-		  	console.log("Error: " + error)
-		  }
-		})*/
+		})
+
+		article.on("error", function(err){
+		    console.log(error);
+		})
+
+		article.fetch()
 
 		let botResponse = {
 			text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
@@ -77,14 +71,6 @@ app.post('/add-buffer', function (req, res, next) {
       return res.status(200).end()
 	}
 })
-
-function bufferScraper (url) {
-	
-}
-
-function addBuffer(data) {
-	
-}
 
 // error handler
 app.use(function (err, req, res, next) {

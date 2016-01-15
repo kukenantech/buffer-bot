@@ -11,6 +11,7 @@
   "dependencies": {
   	"express": "^4.x.x",
     "request": "^2.x.x",
-  	"body-parser": "^1.x.x"
+  	"body-parser": "^1.x.x",
+    "node-metainspector": "^1.x.x"
   }
 }
