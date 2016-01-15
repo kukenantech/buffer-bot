@@ -23,20 +23,26 @@ app.post('/add-buffer', function (req, res, next) {
 		let url = req.body.text.match(regex)
 
 		//	Parsing URL to get title, images, etc
-		let path = "https://buffer.com/ajax/scraper?url=" + url[0] + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
+		/*let path = "https://buffer.com/ajax/scraper?url=" + url[0] + "&skip_cache=false&need=10&min_width=80&min_height=80&strict=true"
 
 		request(path, function (error, response, body) {
 		  if (!error && response.statusCode == 200) {
 		  	let parseBody = JSON.parse(body)
 
-		  	console.log(parseBody)
+		  	console.log(parseBody)*/
 
 		  	//	Creating payload to POST /update/create
-		  	let data = {
+		  	/*let data = {
 		  		text: parseBody.title + " " + url[0],
 		  		media: {
 		  			link: url[0],
 		  			photo: parseBody.images[0].url[0]
+		  		}
+		  	}*/
+
+		  	let data = {
+		  		media: {
+		  			link: url[0]
 		  		}
 		  	}
 
@@ -57,10 +63,10 @@ app.post('/add-buffer', function (req, res, next) {
 		  			console.log("Body:" + body)
 		  		}
 		  	})
-		  } else {
+		  /*} else {
 		  	console.log("Error: " + error)
 		  }
-		})
+		})*/
 
 		let botResponse = {
 			text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
