@@ -31,18 +31,35 @@ app.post('/add-buffer', function (req, res, next) {
 
 			article.on("fetch", function() {
 
-				//	Data payload
-				let data = {
-			  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, config.LINKEDIN_PID],
+				//	Data payload for Twitter
+				let twdata = {
+			  		profile_ids: [config.TWITTER_PID],
 			  		text: article.ogTitle + " " + url[0],
-			  		/*media: {
-			  			link: url[0],
-			  			title: article.ogTitle,
-			  			description: article.ogDescription,
-			  			picture: article.image,
+			  		media: {
 			  			photo: article.image,
 			  			thumbnail: article.image
-			  		}*/
+			  		}
+			  	}
+			  	
+			  	// API request to Buffer API
+			  	request({
+			  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
+			  	  method: "POST",
+			  	  form: twdata,
+			  	}, function(error, response, body) {
+			  		if(error) {
+			  	  		console.log("Error: " + error)
+			  		} else {
+			  			console.log("Twitter updated created successfully!")
+			  			console.log("Status Code: " + response.statusCode)
+			  			//console.log("Body:" + body)
+			  		}
+			  	})
+
+			  	//	Data payload for Facebook & LinkedIn
+				let data = {
+			  		profile_ids: [config.FACEBOOK_PID, config.LINKEDIN_PID],
+			  		text: article.ogTitle + " " + url[0],
 			  	}
 			  	
 			  	// API request to Buffer API
@@ -54,7 +71,7 @@ app.post('/add-buffer', function (req, res, next) {
 			  		if(error) {
 			  	  		console.log("Error: " + error)
 			  		} else {
-			  			console.log("Success!")
+			  			console.log("Facebbok & LinkedId update created!")
 			  			console.log("Status Code: " + response.statusCode)
 			  			//console.log("Body:" + body)
 			  		}
