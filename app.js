@@ -72,7 +72,7 @@ app.post('/add-buffer', function (req, res, next) {
 
 		    return res.status(200).json(botResponse)
 		} else {
-			return res.status(200).json({text: "@" + req.body.user_name + "No detecté ningún URL para compartir :-1:. Inténtalo de nuevo!"})
+			return res.status(200).json({text: "@" + req.body.user_name + " No detecté ningún URL para compartir :-1:. Inténtalo de nuevo!"})
 		}
 	} else {
       return res.status(200).end()
