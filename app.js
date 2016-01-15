@@ -39,8 +39,9 @@ app.post('/add-buffer', function (req, res, next) {
 			  			link: url[0],
 			  			title: article.ogTitle,
 			  			description: article.ogDescription,
-			  			//photo: article.image,
 			  			picture: article.image
+			  			photo: article.image,
+			  			thumbnail: article.image
 			  		}
 			  	}
 			  	
