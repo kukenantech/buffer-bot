@@ -35,14 +35,14 @@ app.post('/add-buffer', function (req, res, next) {
 				let data = {
 			  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, config.LINKEDIN_PID],
 			  		text: article.ogTitle + " " + url[0],
-			  		media: {
+			  		/*media: {
 			  			link: url[0],
 			  			title: article.ogTitle,
 			  			description: article.ogDescription,
 			  			picture: article.image,
 			  			photo: article.image,
 			  			thumbnail: article.image
-			  		}
+			  		}*/
 			  	}
 			  	
 			  	// API request to Buffer API
