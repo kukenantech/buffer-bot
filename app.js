@@ -32,7 +32,7 @@ app.post('/add-buffer', function (req, res, next) {
 
 			//	Data payload
 			let data = {
-		  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, LINKEDIN_PID],
+		  		profile_ids: [ config.TWITTER_PID, config.FACEBOOK_PID, config.LINKEDIN_PID],
 		  		text: article.ogTitle + " " + url[0],
 		  		media: {
 		  			link: url[0],
