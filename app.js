@@ -25,7 +25,7 @@ app.post('/add-buffer', function (req, res, next) {
 		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
 		let url = req.body.text.match(regex)
 
-		if(url[0]) {
+		if(url && url[0]) {
 			//	Getting Title, Description, Images and Metatags
 			let article = new MetaInspector(url[0], { timeout: 5000 })
 
