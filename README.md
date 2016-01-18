@@ -1,4 +1,4 @@
-# Buffer ot
+# Buffer Bot
 
 Buffer Bot help you to share articles from Slack to your Buffer account.
 
@@ -8,3 +8,4 @@ Just type `add-buffer http://urltoshare.co` in a slack selected channel and Buff
 
 ## Setup and Installation
 
+[To do]
