@@ -1,13 +1,13 @@
 {
-  "name": "slack-buffer",
+  "name": "buffer-bot",
   "version": "1.0.0",
   "description": "Add urls to buffer using Slack Outgoing Webhooks",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Juan Gonzalez",
-  "license": "ISC",
+  "author": "Juan Gonzalez <juan@kukenan.tech>",
+  "license": "MIT",
   "dependencies": {
   	"express": "^4.x.x",
     "request": "^2.x.x",

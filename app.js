@@ -14,7 +14,7 @@ let port = process.env.PORT || 3000
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // home route
-app.get('/', function (req, res) { res.status(200).send('Hello world!') })
+app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m BufferBot') })
 
 // POST request triggered from slack add-buffer
 app.post('/add-buffer', function (req, res, next) {
