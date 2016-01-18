@@ -1,7 +1,7 @@
 {
   "name": "buffer-bot",
   "version": "1.0.0",
-  "description": "Add urls to buffer using Slack Outgoing Webhooks",
+  "description": "Buffer Bot help you to share articles from Slack to your Buffer account.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
