@@ -18,8 +18,7 @@ app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m Buffe
 
 //POST request when /buffer command is used
 app.post('/buffer', function (req, res, next) {
-	console.log("Request " + req.body)
-	console.log("Respose " + res.body)
+	console.log(req.body)
 
 	let botResponse = {
     	"text": "It's 80 degrees right now.",
