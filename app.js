@@ -18,8 +18,19 @@ app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m Buffe
 
 //POST request when /buffer command is used
 app.post('/buffer', function (req, res, next) {
-	console.log("Request" + req.body)
-	console.log("Respose" + res.body)
+	console.log("Request " + req.body)
+	console.log("Respose " + res.body)
+
+	let botResponse = {
+    	"text": "It's 80 degrees right now.",
+    	"attachments": [
+        	{
+            	"text":"Partly cloudy today and tomorrow"
+        	}
+    	]
+	}
+
+	return res.status(200).json(botResponse)
 })
 
 // POST request triggered from slack add-buffer
