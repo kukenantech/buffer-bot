@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m BufferBot') })
 
 //POST request when /buffer command is used
-app.post('/buffer' function (req, res, next) {
+app.post('/buffer', function (req, res, next) {
 	console.log("Request" + req.body)
 	console.log("Respose" + res.body)
 })
