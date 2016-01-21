@@ -41,6 +41,7 @@ function createUpdate (url, sharedNow, hashtags, response_url) {
 	  			console.log("Status Code: " + response.statusCode)
 	  			//console.log("Body:" + body)
 
+	  			//	POST request to create delayed response as attachment
 	  			let linkAttached = {
 	  				attachments: [
 	  					{
@@ -59,7 +60,11 @@ function createUpdate (url, sharedNow, hashtags, response_url) {
 	  				method: "POST",
 	  				json: linkAttached
 	  			}, function (error, response, body) {
-
+	  				if(error) {
+	  					console.log("Error:" + error)
+	  				} else {
+	  					console.log("Article attached in Slack Response!")
+	  				}
 	  			})
 			}
 	  	})
@@ -104,8 +109,6 @@ app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m Buffe
 app.post('/buffer', function (req, res, next) {
 	
 	let reqPayload = req.body
-
-	console.log(reqPayload)
 
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
@@ -163,87 +166,6 @@ app.post('/buffer', function (req, res, next) {
 		return res.status(200).json(botResponse)
 	} else {
 		return res.status(404).json({status: "404 Not Found"})
-	}
-})
-
-// POST request triggered from slack add-buffer
-app.post('/add-buffer', function (req, res, next) {
-
-	if (req.body.user_name !== 'slackbot') {
-
-		//	Getting URL from slack message
-		let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i
-		let url = req.body.text.match(regex)
-
-		if(url && url[0]) {
-			//	Getting Title, Description, Images and Metatags
-			let article = new MetaInspector(url[0], { timeout: 5000 })
-
-			article.on("fetch", function() {
-
-				//	Data payload for Twitter
-				let twdata = {
-			  		profile_ids: [config.TWITTER_PID],
-			  		text: article.ogTitle + " " + url[0],
-			  		media: {
-			  			photo: article.image,
-			  			thumbnail: article.image
-			  		}
-			  	}
-			  	
-			  	// API request to Buffer API
-			  	request({
-			  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
-			  	  method: "POST",
-			  	  form: twdata,
-			  	}, function(error, response, body) {
-			  		if(error) {
-			  	  		console.log("Error: " + error)
-			  		} else {
-			  			console.log("Twitter updated created successfully!")
-			  			console.log("Status Code: " + response.statusCode)
-			  			//console.log("Body:" + body)
-			  		}
-			  	})
-
-			  	//	Data payload for Facebook & LinkedIn
-				let data = {
-			  		profile_ids: [config.FACEBOOK_PID, config.LINKEDIN_PID],
-			  		text: article.ogTitle + " " + url[0],
-			  	}
-			  	
-			  	// API request to Buffer API
-			  	request({
-			  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
-			  	  method: "POST",
-			  	  form: data,
-			  	}, function(error, response, body) {
-			  		if(error) {
-			  	  		console.log("Error: " + error)
-			  		} else {
-			  			console.log("Facebbok & LinkedId update created!")
-			  			console.log("Status Code: " + response.statusCode)
-			  			//console.log("Body:" + body)
-			  		}
-			  	})
-			})
-
-			article.on("error", function(err){
-			    console.log(error);
-			})
-
-			article.fetch()
-
-			let botResponse = {
-				text : "@" + req.body.user_name + " Gracias por ocuparte de estos asuntos tan importantes."
-			}
-
-		    return res.status(200).json(botResponse)
-		} else {
-			return res.status(200).json({text: "@" + req.body.user_name + " No detecté ningún URL para compartir :-1:. Inténtalo de nuevo!"})
-		}
-	} else {
-      return res.status(200).end()
 	}
 })
 
