@@ -37,16 +37,12 @@ app.get('/buffer', function (req, res, next) {
 
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
-
+		console.log(req.reqPayload)
 		let botResponse = {
 			//"response_type": "in_channel",
-	    	"attachments": [
-	        	{
-	            	"title": "See README in the Github Repository",
-            		"title_link": "https://github.com/kukenantech/buffer-bot",
-	        	}
-	    	]
+	    	"text": "Got it!",
 		}
+
 		let words = reqPayload.text.split(" ")
 
 		switch(words.length) {
