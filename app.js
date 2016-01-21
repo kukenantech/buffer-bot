@@ -100,7 +100,6 @@ app.post('/buffer', function (req, res, next) {
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
 			response_type: "in_channel",
-			text: "@here: Hey Team, take a look at this article that @" + reqPayload.user_name + " just shared on Buffer."
 		}
 		let readmeLink = {
 	            		title: "README",
@@ -118,7 +117,8 @@ app.post('/buffer', function (req, res, next) {
 					let url = words[0].trim()
 					createUpdate(url, false, '', reqPayload.response_url)
 
-					botResponse.attachments = [{title: "Read here", title_link: url}]
+					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
+					//botResponse.attachments = [{title: title, title_link: url}]
 				} else {
 					if(words[0].trim() == "help") {
 	        			botResponse.text = errorMsg
@@ -137,13 +137,15 @@ app.post('/buffer', function (req, res, next) {
 					let hashtags = reqPayload.text.match(/#\w+/gi)
 					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
 
-					botResponse.attachments = [{title: "Read here", title_link: url}]
+					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
+					//botResponse.attachments = [{title: title, title_link: url}]
 				} else if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
 					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
 
-					botResponse.attachments = [{title: "Read here", title_link: url}]
+					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
+					//botResponse.attachments = [{title: title, title_link: url}]
 				} else {
 	        		botResponse.text = errorMsg
 	        		botResponse.attachments = [readmeLink]
