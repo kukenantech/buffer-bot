@@ -14,7 +14,7 @@ Just type `/buffer` and Buffer Bot will do the rest. If you need help type `/buf
 
 - **URL** (Required): The link that will be shared. Buffer Bot will get Title, Description and Image from this parameter.
 
-- **Hashtags** (Optional): Multiple hashtags are supported separated by a comma and must contain the hash (`#`) symbol.
+- **Hashtags** (Optional): Multiple hashtags are supported, each of them must contain the hash (`#`) symbol.
 
 ### Examples
 
