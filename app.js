@@ -84,6 +84,8 @@ app.post('/buffer', function (req, res, next) {
 	
 	let reqPayload = req.body
 
+	console.log(reqPayload)
+	
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
