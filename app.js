@@ -19,7 +19,8 @@ function createUpdate (url, sharedNow, hashtags) {
 	article.on("fetch", function() {
 
 		//	Set title global
-		title = article.ogTitle + hashtags
+		title = article.ogTitle
+		console.log("T1" + title)
 
 		//	Data payload for Twitter
 		let twdata = {
@@ -113,6 +114,7 @@ app.post('/buffer', function (req, res, next) {
 					botResponse.attachments = [{title: title, title_link: url}]
 				} else {
 					if(words[0].trim() == "help") {
+						console.log("T2" + title)
 	        			botResponse.text = errorMsg
 	        		} else {
 	        			botResponse.text = "For futher details see README in the Github repository."	
