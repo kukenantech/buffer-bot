@@ -18,21 +18,29 @@ Just type `/buffer` and Buffer Bot will do the rest. If you need help type `/buf
 
 ### Examples
 
-#### Add a link in Buffer Queue
+Add a link in Buffer Queue
 
-`/buffer http://link-to-share.com`
+```bash
+/buffer http://link-to-share.com
+```
 
-#### Share a link immediately in your Buffer Profiles
+Share a link immediately in your Buffer Profiles
 
-`/buffer now http://link-to-share.com`
+```bash
+/buffer now http://link-to-share.com
+```
 
-#### Add a link in Buffer Queue with hashtags
+Add a link in Buffer Queue with hashtags
 
-`/buffer http://link-to-share.com #slack,#bufferbot`
+```bash
+/buffer http://link-to-share.com #slack #bufferbot
+```
 
-#### Share a link immediately in your Buffer Profiles with hashtags
+Share a link immediately in your Buffer Profiles with hashtags
 
-`/buffer now http://link-to-share.com #slack,#bufferbot`
+```bash
+/buffer now http://link-to-share.com #slack #bufferbot
+```
 
 
 ## Setup and Installation
@@ -66,3 +74,5 @@ All other settings can be set on your own discretion.
 ## Contribute
 
 If you want to add any new features, or improve existing ones, feel free to send a pull request.
+
+[![kukenan.tech](http://kukenan.tech/img/Kukenan-cube-footer.png)](http://kukenan.tech)
