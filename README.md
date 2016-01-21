@@ -14,7 +14,7 @@ Just type `/buffer` and Buffer Bot will do the rest. If you need help type `/buf
 
 - **URL** (Required): The link that will be shared. Buffer Bot will get Title, Description and Image from this parameter.
 
-- **Hashtags** (Optional): Multiple hashtags are supported separated by a blank space and must contain the hash (`#`) symbol.
+- **Hashtags** (Optional): Multiple hashtags are supported separated by a comma and must contain the hash (`#`) symbol.
 
 ### Examples
 
@@ -28,11 +28,11 @@ Just type `/buffer` and Buffer Bot will do the rest. If you need help type `/buf
 
 #### Add a link in Buffer Queue with hashtags
 
-`/buffer http://link-to-share.com #slack #bufferbot`
+`/buffer http://link-to-share.com #slack,#bufferbot`
 
 #### Share a link immediately in your Buffer Profiles with hashtags
 
-`/buffer now http://link-to-share.com #slack #bufferbot`
+`/buffer now http://link-to-share.com #slack,#bufferbot`
 
 
 ## Setup and Installation

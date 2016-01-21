@@ -4,6 +4,7 @@ const express = require('express')
 const request = require('request')
 const bodyParser = require('body-parser')
 const MetaInspector = require('node-metainspector')
+const validator = require('validator')
 
 let config = require('./config');
 
@@ -17,19 +18,73 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m BufferBot') })
 
 //POST request when /buffer command is used
-app.post('/buffer', function (req, res, next) {
-	console.log(req.body)
+app.get('/buffer', function (req, res, next) {
+	
+	let reqPayload = req.body
 
-	let botResponse = {
-    	"text": "It's 80 degrees right now.",
-    	"attachments": [
-        	{
-            	"text":"Partly cloudy today and tomorrow"
-        	}
-    	]
+	/*let reqPayload = { 
+		token: 'BG9XlDliMQUGfd9uypZG5yzZ',
+		team_id: 'T04N7JNTU',
+		team_domain: 'kukenan',
+		channel_id: 'D04N7JP42',
+		channel_name: 'directmessage',
+		user_id: 'U04N7JNUS',
+		user_name: 'juan',
+		command: '/buffer',
+		text: 'now lksjdajsdkaj #aksjdlkasd',
+		response_url: 'https://hooks.slack.com/commands/T04N7JNTU/19012685108/cm5hKzkhnYjHY15SLaWQRqTZ'
+	}*/
+
+	//	Token validation
+	if(reqPayload.token == config.COMMAND_TOKEN) {
+
+		let botResponse = {
+			//"response_type": "in_channel",
+	    	"attachments": [
+	        	{
+	            	"title": "See README in the Github Repository",
+            		"title_link": "https://github.com/kukenantech/buffer-bot",
+	        	}
+	    	]
+		}
+		let words = reqPayload.text.split(" ")
+
+		switch(words.length) {
+			case 1:
+				//	Checking if contain help work or the link to share
+				if(words[0].trim() == "help") {
+					let readmeLink = {
+						pretext: "See README in the Github repository",
+	            		title: "README",
+            			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
+	        		}
+
+					botResponse.attachments = [readmeLink]
+				} else if(validator.isURL(words[0].trim())) {
+					console.log("add link to queue")
+				} else {
+					let readmeLink = {
+						pretext: "See README in the Github repository",
+	            		title: "README",
+            			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
+	        		}
+					botResponse.text = "Oops! Sorry, I can't understand your request. Please try again! For futher details see README in the Gthub repository"
+					botResponse.attachments = [readmeLink]
+				}
+
+				break
+			case 2:
+				break
+			case 3:
+				break
+			default:
+				break
+		}
+
+		return res.status(200).json(botResponse)
+	} else {
+		return res.status(404).json({status: "404 Not Found"})
 	}
-
-	return res.status(200).json(botResponse)
 })
 
 // POST request triggered from slack add-buffer
