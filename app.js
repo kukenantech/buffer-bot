@@ -11,6 +11,68 @@ let config = require('./config');
 let app = express()
 let port = process.env.PORT || 3000
 
+function createUpdate (url, sharedNow, hashtags) {
+	//	Getting Title, Description, Images and Metatags
+	let article = new MetaInspector(url, { timeout: 5000 })
+
+	article.on("fetch", function() {
+
+		//	Data payload for Twitter
+		let twdata = {
+	  		profile_ids: [config.TWITTER_PID],
+	  		text: article.ogTitle + " " + url + " " + hashtags,
+	  		now: sharedNow,
+	  		media: {
+	  			photo: article.image,
+	  			thumbnail: article.image
+	  		}
+	  	}
+	  	
+	  	// API request to Buffer API
+	  	request({
+	  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
+	  	  method: "POST",
+	  	  form: twdata,
+	  	}, function(error, response, body) {
+	  		if(error) {
+	  	  		console.log("Error: " + error)
+	  		} else {
+	  			console.log("Twitter updated created successfully!")
+	  			console.log("Status Code: " + response.statusCode)
+	  			//console.log("Body:" + body)
+	  		}
+	  	})
+
+	  	//	Data payload for Facebook & LinkedIn
+		let data = {
+	  		profile_ids: [config.FACEBOOK_PID, config.LINKEDIN_PID],
+	  		text: article.ogTitle + " " + url + " " + hashtags,
+	  		now: sharedNow
+	  	}
+	  	
+	  	// API request to Buffer API
+	  	request({
+	  	  uri: config.API_ENDPOINT + "/updates/create.json?access_token=" + config.ACCESS_TOKEN,
+	  	  method: "POST",
+	  	  form: data,
+	  	}, function(error, response, body) {
+	  		if(error) {
+	  	  		console.log("Error: " + error)
+	  		} else {
+	  			console.log("Facebook & LinkedId update created!")
+	  			console.log("Status Code: " + response.statusCode)
+	  			//console.log("Body:" + body)
+	  		}
+	  	})
+	})
+
+	article.on("error", function(err){
+	    console.log(error);
+	})
+
+	article.fetch()
+}
+
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -22,59 +84,58 @@ app.post('/buffer', function (req, res, next) {
 	
 	let reqPayload = req.body
 
-	/*let reqPayload = { 
-		token: 'BG9XlDliMQUGfd9uypZG5yzZ',
-		team_id: 'T04N7JNTU',
-		team_domain: 'kukenan',
-		channel_id: 'D04N7JP42',
-		channel_name: 'directmessage',
-		user_id: 'U04N7JNUS',
-		user_name: 'juan',
-		command: '/buffer',
-		text: 'now lksjdajsdkaj #aksjdlkasd',
-		response_url: 'https://hooks.slack.com/commands/T04N7JNTU/19012685108/cm5hKzkhnYjHY15SLaWQRqTZ'
-	}*/
-	console.log(req.reqPayload)
-
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
 			//"response_type": "in_channel",
 	    	"text": "",
 		}
+		let readmeLink = {
+	            		title: "README",
+            			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
+            			text: "Buffer Bot help you to share articles from Slack to your Buffer account."
+	        		}
+	    let errorMsg = "Oops! Sorry, I can't understand your request. Please try again! For futher details see README in the Github repository."
 
-		let words = reqPayload.text.split(" ")
+		let words = reqPayload.text.trim().split(" ")
 
 		switch(words.length) {
 			case 1:
-				//	Checking if contain help work or the link to share
-				if(words[0].trim() == "help") {
-					let readmeLink = {
-						text: "Buffer Bot help you to share articles from Slack to your Buffer account.",
-	            		title: "README",
-            			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
-	        		}
-
-	        		botResponse.text = "For futher details see README in the Gthub repository."
-					botResponse.attachments = [readmeLink]
-				} else if(validator.isURL(words[0].trim())) {
-					botResponse.text = "Add link to queue"
+				//	Checking if contain the link to share or help word
+				if(validator.isURL(words[0].trim())) {
+					botResponse.text = "Add URL to queue"
 				} else {
-					let readmeLink = {
-						text: "Buffer Bot help you to share articles from Slack to your Buffer account.",
-	            		title: "README",
-            			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
+					if(words[0].trim() == "help") {
+	        			botResponse.text = errorMsg
+	        		} else {
+	        			botResponse.text = "For futher details see README in the Github repository."	
 	        		}
-					botResponse.text = "Oops! Sorry, I can't understand your request. Please try again! For futher details see README in the Gthub repository"
-					botResponse.attachments = [readmeLink]
-				}
 
+	        		botResponse.attachments = [readmeLink]
+				}
 				break
+
 			case 2:
+				//	Checking format "now http://urltosahre.com" or "http://urltosahre.com #slack,#buffer"
+				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
+					//Share now link
+					botResponse.text = "Share now link without hashtags"
+				} else if(validator.isURL(words[0].trim())) {
+					//share url and hashtags
+					botResponse.text = "Add link to queue with hashtags"
+				} else {
+	        		botResponse.text = errorMsg
+	        		botResponse.attachments = [readmeLink]
+				}
 				break
-			case 3:
-				break
+
 			default:
+				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
+					botResponse.text = "Share now link with hashtags"
+				} else {
+	        		botResponse.text = errorMsg
+	        		botResponse.attachments = [readmeLink]
+				}
 				break
 		}
 
