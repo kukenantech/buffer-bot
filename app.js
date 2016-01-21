@@ -103,6 +103,9 @@ app.post('/buffer', function (req, res, next) {
 			case 1:
 				//	Checking if contain the link to share or help word
 				if(validator.isURL(words[0].trim())) {
+					let url = words[0].trim()
+					createUpdate(url, false, '')
+
 					botResponse.text = "Add URL to queue"
 				} else {
 					if(words[0].trim() == "help") {
@@ -118,10 +121,14 @@ app.post('/buffer', function (req, res, next) {
 			case 2:
 				//	Checking format "now http://urltosahre.com" or "http://urltosahre.com #slack,#buffer"
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
-					//Share now link
+					let url = words[1].trim()
+					createUpdate(url, true, '')
+
 					botResponse.text = "Share now link without hashtags"
 				} else if(validator.isURL(words[0].trim())) {
-					//share url and hashtags
+					let url = words[0].trim()
+					createUpdate(url, false, '')
+
 					botResponse.text = "Add link to queue with hashtags"
 				} else {
 	        		botResponse.text = errorMsg
@@ -131,6 +138,9 @@ app.post('/buffer', function (req, res, next) {
 
 			default:
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
+					let url = words[1].trim()
+					createUpdate(url, true, '')
+
 					botResponse.text = "Share now link with hashtags"
 				} else {
 	        		botResponse.text = errorMsg
