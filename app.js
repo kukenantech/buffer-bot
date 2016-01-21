@@ -122,14 +122,14 @@ app.post('/buffer', function (req, res, next) {
 				//	Checking format "now http://urltosahre.com" or "http://urltosahre.com #slack,#buffer"
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
 					let url = words[1].trim()
-					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
-					createUpdate(url, true, hashtags)
+					let hashtags = reqPayload.text.match(/#\w+/gi)
+					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '')
 
 					botResponse.text = "Share now link without hashtags"
 				} else if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
-					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
-					createUpdate(url, false, hashtags)
+					let hashtags = reqPayload.text.match(/#\w+/gi)
+					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '')
 
 					botResponse.text = "Add link to queue with hashtags"
 				} else {
