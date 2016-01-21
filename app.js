@@ -87,7 +87,7 @@ app.post('/buffer', function (req, res, next) {
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
-			//"response_type": "in_channel",
+			response_type: "in_channel",
 		}
 		let readmeLink = {
 	            		title: "README",
