@@ -10,12 +10,16 @@ let config = require('./config');
 
 let app = express()
 let port = process.env.PORT || 3000
+let title
 
 function createUpdate (url, sharedNow, hashtags) {
 	//	Getting Title, Description, Images and Metatags
 	let article = new MetaInspector(url, { timeout: 5000 })
 
 	article.on("fetch", function() {
+
+		//	Set title global
+		title = article.ogTitle + hashtags
 
 		//	Data payload for Twitter
 		let twdata = {
@@ -106,7 +110,7 @@ app.post('/buffer', function (req, res, next) {
 					let url = words[0].trim()
 					createUpdate(url, false, '')
 
-					botResponse.attachments = [{title_link: url}]
+					botResponse.attachments = [{title: title, title_link: url}]
 				} else {
 					if(words[0].trim() == "help") {
 	        			botResponse.text = errorMsg
@@ -125,13 +129,13 @@ app.post('/buffer', function (req, res, next) {
 					let hashtags = reqPayload.text.match(/#\w+/gi)
 					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '')
 
-					botResponse.attachments = [{title_link: url}]
+					botResponse.attachments = [{title: title, title_link: url}]
 				} else if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
 					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '')
 
-					botResponse.attachments = [{title_link: url}]
+					botResponse.attachments = [{title: title, title_link: url}]
 				} else {
 	        		botResponse.text = errorMsg
 	        		botResponse.attachments = [readmeLink]
