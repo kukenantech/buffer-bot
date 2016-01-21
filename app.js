@@ -118,11 +118,12 @@ app.post('/buffer', function (req, res, next) {
 				}
 				break
 
-			case 2:
+			default:
 				//	Checking format "now http://urltosahre.com" or "http://urltosahre.com #slack,#buffer"
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
 					let url = words[1].trim()
-					createUpdate(url, true, '')
+					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
+					createUpdate(url, true, hashtags)
 
 					botResponse.text = "Share now link without hashtags"
 				} else if(validator.isURL(words[0].trim())) {
@@ -137,18 +138,18 @@ app.post('/buffer', function (req, res, next) {
 				}
 				break
 
-			default:
+			/*default:
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
 					let url = words[1].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
-					createUpdate(url, now, hashtags)
+					createUpdate(url, true, hashtags)
 
 					botResponse.text = "Share now link with hashtags"
 				} else {
 	        		botResponse.text = errorMsg
 	        		botResponse.attachments = [readmeLink]
 				}
-				break
+				break*/
 		}
 
 		return res.status(200).json(botResponse)
