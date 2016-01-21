@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', function (req, res) { res.status(200).send('Hello world! I\'m BufferBot') })
 
 //POST request when /buffer command is used
-app.get('/buffer', function (req, res, next) {
+app.post('/buffer', function (req, res, next) {
 	
 	let reqPayload = req.body
 
@@ -35,7 +35,7 @@ app.get('/buffer', function (req, res, next) {
 		response_url: 'https://hooks.slack.com/commands/T04N7JNTU/19012685108/cm5hKzkhnYjHY15SLaWQRqTZ'
 	}*/
 	console.log(req.reqPayload)
-	
+
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
