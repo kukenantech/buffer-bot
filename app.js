@@ -132,12 +132,7 @@ app.post('/buffer', function (req, res, next) {
 					let url = words[0].trim()
 					createUpdate(url, false, '', reqPayload.response_url)
 				} else {
-					if(words[0].trim() == "help") {
-	        			botResponse.text = errorMsg
-	        		} else {
-	        			botResponse.text = "For futher details see README in the Github repository."	
-	        		}
-
+	        		botResponse.text = "For futher details see README in the Github repository."
 	        		botResponse.attachments = [readmeLink]
 				}
 				break
