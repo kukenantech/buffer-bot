@@ -11,7 +11,7 @@ let config = require('./config');
 let app = express()
 let port = process.env.PORT || 3000
 
-function createUpdate (url, sharedNow, hashtags) {
+function createUpdate (url, sharedNow, hashtags, response_url) {
 	//	Getting Title, Description, Images and Metatags
 	let article = new MetaInspector(url, { timeout: 5000 })
 
@@ -40,7 +40,28 @@ function createUpdate (url, sharedNow, hashtags) {
 	  			console.log("Twitter updated created!")
 	  			console.log("Status Code: " + response.statusCode)
 	  			//console.log("Body:" + body)
-	  		}
+
+	  			let linkAttached = {
+	  				attachments: [
+	  					{
+	  						title: article.ogTitle + " " + hashtags,
+	  						title_link: url,
+	  						text: article.description,
+	  						image_url: article.image,
+	  						thumb_url: article.image,
+	  						author_name: article.author
+	  					}
+	  				]
+	  			}
+
+	  			request({
+	  				uri: response_url,
+	  				method: "POST",
+	  				json: linkAttached
+	  			}, function (error, response, body) {
+
+	  			})
+			}
 	  	})
 
 	  	//	Data payload for Facebook & LinkedIn
@@ -85,12 +106,12 @@ app.post('/buffer', function (req, res, next) {
 	let reqPayload = req.body
 
 	console.log(reqPayload)
-	
+
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
 			response_type: "in_channel",
-			text: "@here: Hey Team, take a look at this article that @" + reqPayload.user_name + " just shared on Buffer."
+			text: "@channel: Hey Team, take a look at this article that @" + reqPayload.user_name + " just shared on Buffer."
 		}
 		let readmeLink = {
 	            		title: "README",
@@ -106,9 +127,7 @@ app.post('/buffer', function (req, res, next) {
 				//	Checking if contain the link to share or help word
 				if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
-					createUpdate(url, false, '')
-
-					botResponse.attachments = [{title: "Read here", title_link: url}]
+					createUpdate(url, false, '', reqPayload.response_url)
 				} else {
 					if(words[0].trim() == "help") {
 	        			botResponse.text = errorMsg
@@ -123,17 +142,17 @@ app.post('/buffer', function (req, res, next) {
 			default:
 				//	Checking format "now http://urltosahre.com" or "http://urltosahre.com #slack #buffer"
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
+
 					let url = words[1].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
-					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '')
+					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
 
-					botResponse.attachments = [{title: "Read here", title_link: url}]
 				} else if(validator.isURL(words[0].trim())) {
+
 					let url = words[0].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
-					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '')
+					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
 
-					botResponse.attachments = [{title: "Read here", title_link: url}]
 				} else {
 	        		botResponse.text = errorMsg
 	        		botResponse.attachments = [readmeLink]
