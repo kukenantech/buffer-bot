@@ -11,7 +11,7 @@ let config = require('./config');
 let app = express()
 let port = process.env.PORT || 3000
 
-function createUpdate (url, sharedNow, hashtags, response_url) {
+function createUpdate (url, sharedNow, hashtags) {
 	//	Getting Title, Description, Images and Metatags
 	let article = new MetaInspector(url, { timeout: 5000 })
 
@@ -40,18 +40,6 @@ function createUpdate (url, sharedNow, hashtags, response_url) {
 	  			console.log("Twitter updated created!")
 	  			console.log("Status Code: " + response.statusCode)
 	  			//console.log("Body:" + body)
-
-	  			request({
-	  			  uri: response_url,
-	  			  method: "POST",
-	  			  form: {attachments: [{title: article.ogTitle + " " + hashtags, title_link: url, text: article.description}]},
-	  			}, function(error, response, body) {
-	  				if(error) {
-	  			  		console.log("Error: " + error)
-	  				} else {
-	  					console.log("Slack attachment created!")
-	  				}
-	  			})
 	  		}
 	  	})
 
@@ -115,7 +103,7 @@ app.post('/buffer', function (req, res, next) {
 				//	Checking if contain the link to share or help word
 				if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
-					createUpdate(url, false, '', reqPayload.response_url)
+					createUpdate(url, false, '')
 
 					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
 					//botResponse.attachments = [{title: title, title_link: url}]
@@ -135,14 +123,14 @@ app.post('/buffer', function (req, res, next) {
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
 					let url = words[1].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
-					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
+					createUpdate(url, true, (hashtags) ? hashtags.join(' ') : '')
 
 					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
 					//botResponse.attachments = [{title: title, title_link: url}]
 				} else if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
 					let hashtags = reqPayload.text.match(/#\w+/gi)
-					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '', reqPayload.response_url)
+					createUpdate(url, false, (hashtags) ? hashtags.join(' ') : '')
 
 					botResponse.text = "@here: Hey Team, take a look at this article " + url + " that @" + reqPayload.user_name + " just shared on Buffer."
 					//botResponse.attachments = [{title: title, title_link: url}]
