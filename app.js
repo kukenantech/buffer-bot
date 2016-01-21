@@ -37,7 +37,7 @@ function createUpdate (url, sharedNow, hashtags) {
 	  		if(error) {
 	  	  		console.log("Error: " + error)
 	  		} else {
-	  			console.log("Twitter updated created successfully!")
+	  			console.log("Twitter updated created!")
 	  			console.log("Status Code: " + response.statusCode)
 	  			//console.log("Body:" + body)
 	  		}
@@ -127,7 +127,8 @@ app.post('/buffer', function (req, res, next) {
 					botResponse.text = "Share now link without hashtags"
 				} else if(validator.isURL(words[0].trim())) {
 					let url = words[0].trim()
-					createUpdate(url, false, '')
+					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
+					createUpdate(url, false, hashtags)
 
 					botResponse.text = "Add link to queue with hashtags"
 				} else {
@@ -139,7 +140,8 @@ app.post('/buffer', function (req, res, next) {
 			default:
 				if(words[0].trim().toLowerCase() == "now" && validator.isURL(words[1].trim())) {
 					let url = words[1].trim()
-					createUpdate(url, true, '')
+					let hashtags = reqPayload.text.match(/#\w+/gi).join(" ")
+					createUpdate(url, now, hashtags)
 
 					botResponse.text = "Share now link with hashtags"
 				} else {
