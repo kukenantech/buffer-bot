@@ -34,10 +34,10 @@ app.get('/buffer', function (req, res, next) {
 		text: 'now lksjdajsdkaj #aksjdlkasd',
 		response_url: 'https://hooks.slack.com/commands/T04N7JNTU/19012685108/cm5hKzkhnYjHY15SLaWQRqTZ'
 	}*/
-
+	console.log(req.reqPayload)
+	
 	//	Token validation
 	if(reqPayload.token == config.COMMAND_TOKEN) {
-		console.log(req.reqPayload)
 		let botResponse = {
 			//"response_type": "in_channel",
 	    	"text": "Got it!",
