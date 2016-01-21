@@ -40,7 +40,7 @@ app.post('/buffer', function (req, res, next) {
 	if(reqPayload.token == config.COMMAND_TOKEN) {
 		let botResponse = {
 			//"response_type": "in_channel",
-	    	"text": "Got it!",
+	    	"text": "",
 		}
 
 		let words = reqPayload.text.split(" ")
@@ -50,17 +50,18 @@ app.post('/buffer', function (req, res, next) {
 				//	Checking if contain help work or the link to share
 				if(words[0].trim() == "help") {
 					let readmeLink = {
-						pretext: "See README in the Github repository",
+						text: "Buffer Bot help you to share articles from Slack to your Buffer account.",
 	            		title: "README",
             			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
 	        		}
 
+	        		botResponse.text = "For futher details see README in the Gthub repository."
 					botResponse.attachments = [readmeLink]
 				} else if(validator.isURL(words[0].trim())) {
-					console.log("add link to queue")
+					botResponse.text = "Add link to queue"
 				} else {
 					let readmeLink = {
-						pretext: "See README in the Github repository",
+						text: "Buffer Bot help you to share articles from Slack to your Buffer account.",
 	            		title: "README",
             			title_link: "https://github.com/kukenantech/buffer-bot/blob/master/README.md",
 	        		}
