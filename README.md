@@ -46,6 +46,7 @@ $ heroku config:set ACCESS_TOKEN=[ACCESS TOKEN FROM BUFFER APPLICATION]
 $ heroku config:set TWITTER_PID=[TWITTER PROFILE ID]
 $ heroku config:set FACEBOOK_PID=[FACEBOOK PROFILE ID]
 $ heroku config:set LINKEDIN_PID=[LINKEDIN PROFILE ID]
+$ heroku config:set COMMAND_TOKEN=[COMMAND_TOKEN]
 ```
 
 ### Setup Slash Command
