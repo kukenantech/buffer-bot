@@ -59,7 +59,7 @@ $ heroku config:set COMMAND_TOKEN=[COMMAND_TOKEN]
 
 ### Setup Slash Command
 
-1. Read Slack API Docs to understand how Slash Commands works [https://api.slack.com/slash-commands]()
+1. Read Slack API Docs to understand how Slash Commands works [https://api.slack.com/slash-commands](https://api.slack.com/slash-commands)
 2. Create a Slash Command in Slack Settings and set the following data:
     - Command: `/buffer`
     - URL: `https://[URL_GENERATED].herokuapp.com/buffer`
